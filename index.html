@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuis: Temuin Profil FYP-mu!</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+w6dJwTwAywblg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500;700&display=swap');
@@ -21,7 +20,7 @@
             font-family: 'Montserrat Alternates', sans-serif;
             font-weight: 500;
             background-color: var(--c-dark-gray);
-            color: var(--c-black);
+            color: var(--c-white);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -30,24 +29,18 @@
             transition: background-color 0.5s ease;
         }
         .hidden { display: none !important; }
-
-        .card { 
-            background-color: var(--c-white); 
-            border-radius: 24px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25); 
-            width: 100%; 
-            max-width: 400px; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden; 
-            transition: opacity 0.5s ease-in-out; 
-        }
-        .card-body { 
-            padding: 30px; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center;
+        .card { background-color: var(--c-white); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.25); width: 100%; max-width: 400px; display: flex; flex-direction: column; overflow: hidden; height: 90vh; max-height: 800px; transition: opacity 0.5s ease-in-out; }
+        
+        /* === KODE YANG DIPERBAIKI (1) === */
+        .card-body {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* INI YANG DIPERBAIKI */
+            background-color: var(--c-white);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
         }
         
         .btn-start { 
@@ -104,19 +97,13 @@
         #name-input::placeholder { color: var(--c-medium-gray); }
         .privacy-note { font-size: 0.75rem; text-align: center; margin-top: 10px; color: var(--c-white); opacity: 0.8; }
         .intro-footer { margin-top: auto; padding-top: 20px; width: 100%; max-width: 340px; }
-        
-        /* --- PERBAIKAN CSS DI SINI --- */
+
         #start-container {
             background-color: var(--c-orange);
             color: var(--c-white);
             padding: 0; 
             position: relative;
-            /* Mengembalikan tinggi tetap HANYA untuk container ini */
-            height: 90vh;
-            max-height: 800px;
         }
-        /* --- AKHIR PERBAIKAN --- */
-
         .slide {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -143,17 +130,18 @@
         }
         .nav-overlay.left { left: 0; }
         .nav-overlay.right { right: 0; }
-        #question-container .card-header { padding: 30px; color: var(--c-white); }
-        #question-container .btn-grid { margin-top: 20px; }
+        
+        #question-container .card-header { padding: 30px; }
+        #question-container .card-body { justify-content: space-between; }
         #progress-bar-container { width: 100%; height: 8px; background-color: rgba(0, 0, 0, 0.2); border-radius: 4px; margin-bottom: 15px; overflow: hidden; }
         #progress-bar-fill { height: 100%; width: 0%; background-color: var(--c-white); border-radius: 4px; transition: width 0.4s ease-in-out; }
         #progress-text { font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; color: rgba(255,255,255,0.7); }
-        .card-header h2 { font-weight: 700; position: relative; z-index: 2; font-size: 1.6rem; line-height: 1.4; }
+        .card-header h2 { font-weight: 700; position: relative; z-index: 2; font-size: 1.3rem; line-height: 1.4; }
         .btn-grid { display: grid; gap: 12px; }
         .btn-answer { background-color: var(--c-white); color: var(--c-black); border: 2px solid var(--c-light-gray); padding: 15px 20px; border-radius: 50px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; text-align: left; display: flex; align-items: center; gap: 15px; font-family: 'Montserrat Alternates', sans-serif; font-weight: 500; }
         .btn-answer .icon { font-size: 1.4rem; }
         .btn-answer:hover { border-color: var(--c-black); transform: scale(1.02); }
-        .footer { height: 30px; display: flex; justify-content: center; align-items: center; margin-top: 20px; }
+        .footer { height: 30px; display: flex; justify-content: center; align-items: center; margin-top: 20px}
         .footer svg { height: 20px; width: auto; color: var(--c-light-gray); }
         #animation-screen { color: var(--c-white); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; transition: opacity 0.5s ease-in-out; }
         #animation-screen h2 { font-size: 1.2rem; opacity: 0.8; }
@@ -234,7 +222,7 @@
     <div id="question-container" class="card hidden"> <div class="card-header" id="question-header"> <div id="progress-bar-container"> <div id="progress-bar-fill"></div> </div> <p id="progress-text"></p> <h2 id="question-text"></h2> </div> <div class="card-body"> <div id="answer-buttons" class="btn-grid"></div> <footer class="footer"> <svg viewBox="0 0 675 286" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M187.951 181.722L176.767 118.797L102.836 131.937L99.6085 113.697L177.938 99.7548L164.863 26.1162L0 55.4195L39.1444 275.718L125.657 260.337L114.02 194.883L187.951 181.722Z" fill="currentColor"/><path d="M402.896 216.268C445.473 136.193 412.805 15.3816 408.364 0L353.06 14.1067C355.754 26.5066 359.454 62.9249 344.302 82.3988C336.963 91.8581 325.018 96.7317 307.851 97.3074C291.137 97.8421 278.986 93.7294 270.66 84.6608C252.568 64.9196 252.876 25.0877 254.542 11.3923L226.191 7.8759L197.86 4.27725C196.894 11.9269 189.472 80.3424 228.349 123.033C242.103 138.126 267.37 155.77 309.763 154.392C334.249 153.57 352.546 146.969 366.095 138.476C364.471 155.626 360.832 171.954 354.335 185.711C354.335 185.711 354.273 185.855 354.15 186.102C352.485 189.536 339.286 214.685 306.021 226.262C292.514 229.82 280.631 228.977 274.299 228.072C266.527 226.92 260.545 224.823 256.289 222.684C253.205 221.142 252.835 216.844 255.693 214.911C255.713 214.891 255.734 214.87 255.775 214.85C258.962 212.69 265.273 212.732 273.908 214.706C286.655 214.829 335.935 213.246 347.551 182.626C304.891 160.685 256.001 145.694 223.744 167.574C192.536 188.713 190.582 213.081 192.186 225.707C195.126 248.78 213.979 268.644 242.617 278.823C252.835 282.463 264.883 285.013 277.897 285.774C305.363 287.378 337.209 281.003 365.458 259.946C374.051 265.704 382.707 271.914 391.3 278.535L426.189 233.316C420.535 228.956 412.558 222.972 402.896 216.268Z" fill="currentColor"/><path d="M574.112 35.7968L469.721 21.8882L438.493 256.159L530.507 268.416L537.687 214.552L549.07 216.061C622.334 225.828 659.022 195.976 666.776 137.745C673.598 86.5525 651.743 46.1588 574.112 35.7968ZM556.017 160.129C557.806 141.837 544.413 125.553 526.125 123.785C544.413 125.553 560.693 112.177 562.461 93.8653C560.693 112.177 574.086 128.44 592.374 130.229C574.086 128.44 557.806 141.837 556.017 160.129Z" fill="currentColor"/></svg> </footer> </div> </div>
     <div id="animation-screen" class="hidden"> <h2>Menganalisis jawabanmu...</h2> <div id="persona-spinner"></div> </div>
     <div id="result-screen" class="hidden"> <div id="result-content-wrapper"> <div id="capture-area"> <div id="result-header-area"> <h3 id="result-name-display"></h3> <div id="result-image-placeholder"></div> <h2 id="result-title"></h2> </div> <div id="result-details-card"> <div class="bento-grid"> <div id="bento-superpower" class="bento-cell"></div> <div id="bento-challenge" class="bento-cell"></div> <div id="bento-action-plan" class="bento-cell full-width"></div> <div id="bento-scores" class="bento-cell full-width"></div> </div> </div> </div> <div class="btn-result-group"> <button id="restart-btn" class="btn-result">Coba Lagi</button> <button id="view-all-btn" class="btn-result secondary">Lihat solusi untuk persona lain</button> </div> </div> </div>
-    <div id="all-results-screen" class="hidden"> <button id="close-btn" class="close-btn">×</button> <div id="all-results-container"></div> </div>
+    <div id="all-results-screen" class="hidden"> <button id="close-btn" class="close-btn">&times;</button> <div id="all-results-container"></div> </div>
     
     <script>
         // --- DOM Elements ---
@@ -264,21 +252,65 @@
         const bentoChallenge = document.getElementById('bento-challenge');
         const bentoActionPlan = document.getElementById('bento-action-plan');
         const bentoScores = document.getElementById('bento-scores');
+        
         const slides = document.querySelectorAll('.slide');
         const navLeft = document.getElementById('nav-left');
         const navRight = document.getElementById('nav-right');
+        
         let currentQuestionIndex, scores, userName;
         let currentSlideIndex = 0;
         const totalSlides = slides.length;
+
         const personaKeys = { CO: "Si Chronically Online", TR: "Si Trendy", PV: "Si Pencari Vibe", JUG: "Si Tukang Juggling", PF: "Pawang Fokus" };
         const colorPalette = ['#625ddf', '#9bc77b', '#ff7c00', '#dc595b', '#e995d2', '#85a5ff'];
         const questions = [ { question: "Kamu lagi fokus ngerjain tugas penting yang deadline-nya besok. Tiba-tiba, notif grup kelas rame banget. Apa yang kamu lakuin?", answers: [ { text: "Langsung buka chat, takut ketinggalan info atau jokes penting.", icon: "📱", score: { CO: 2, PF: -1 } }, { text: "Cuma ngintip notif dari lock screen, penasaran dikit, tapi tetep lanjut nugas.", icon: "👀", score: { JUG: 1, PV: 1 } }, { text: "Hape-nya di-silent atau dibalikkin. Fokus nomor satu!", icon: "🤫", score: { PF: 2, CO: -1 } } ]}, { question: "Weekend, gabut. Pas buka medsos, kamu liat temen-temenmu lagi pada hangout. Perasaan kamu gimana?", answers: [ { text: "Langsung ngerasa nyesek, kok aku nggak diajak? Stalk semua story mereka.", icon: "😩", score: { CO: 2, TR: -1 } }, { text: "Kepikiran sih, 'wah asik ya'. Terus lanjut scroll FYP nyari hiburan lain.", icon: "🤔", score: { PV: 2, CO: -1 } }, { text: "'Oh, seru buat mereka'. Jadi termotivasi buat ngerencanain sesuatu yang aku suka.", icon: "🚀", score: { PF: 2, PV: 1 } } ]}, { question: "Guru ngasih tugas proyek kelompok. Ada beberapa pilihan topik. Tim kamu milih topik yang mana?", answers: [ { text: "Topik yang lagi viral atau paling 'aesthetic' biar keren di medsos.", icon: "✨", score: { TR: 2, PF: -1 } }, { text: "Topik yang kayaknya paling gampang dan cepet selesainya.", icon: "👌", score: { JUG: 1, PV: 1 } }, { text: "Topik yang paling menantang dan bikin penasaran, buat belajar hal baru.", icon: "🔬", score: { PF: 2, PV: 1 } } ]}, { question: "Lagi belajar bareng temen. Tiba-tiba, salah satu temen ngajak ngobrolin drakor terbaru. Reaksimu?", answers: [ { text: "Langsung ikutan nimbrung. Momen ngegosip kayak gini langka!", icon: "💬", score: { CO: 2, JUG: 1 } }, { text: "Ikut dengerin sambil tetep coba baca buku. Setengah fokus.", icon: "😵‍💫", score: { JUG: 2, PF: -1 } }, { text: "Bilang ke temen, 'Eh, tahan dulu ya. Beresin satu bab ini dulu.'", icon: "✋", score: { PF: 2, JUG: -1 } } ]}, { question: "Kamu buka laptop niatnya mau ngerjain makalah. Tapi pas buka browser, homepage-nya YouTube. Apa yang terjadi?", answers: [ { text: "Nonton satu video 'dulu ah', eh keterusan sampe lupa waktu.", icon: "▶️", score: { JUG: 2, CO: 1 } }, { text: "Buka tab baru buat makalah, tapi tab YouTube-nya gak ditutup. Jadi bolak-balik.", icon: "🔄", score: { JUG: 2, PF: -1 } }, { text: "Langsung tutup tab YouTube dan buka Google Docs.", icon: "✅", score: { PF: 2, JUG: -2 } } ]}, { question: "Guru lagi ngejelasin materi yang lumayan susah. Kamu mulai ngerasa gak ngerti. Apa yang kamu lakuin?", answers: [ { text: "Pikiran langsung ngelantur, atau diem-diem buka HP buat scroll medsos.", icon: "💭", score: { JUG: 1, PV: 1 } }, { text: "Cuma diem aja, berharap nanti bakal ngerti sendiri atau nanya temen.", icon: "🤷‍♀️", score: { PV: 1 } }, { text: "Langsung angkat tangan dan nanya bagian mana yang gak kamu ngerti.", icon: "🙋‍♂️", score: { PF: 2, PV: -1 } } ]}, { question: "Kamu baru aja nge-post foto baru di Instagram. Apa yang kamu rasain dan lakuin setelah itu?", answers: [ { text: "Tiap beberapa menit buka aplikasi buat ngecek jumlah likes.", icon: "📈", score: { TR: 2, CO: 1 } }, { text: "Seneng kalau ada yang like, tapi yaudah. Lanjutin aktivitas lain.", icon: "😊", score: { PV: 1 } }, { text: "Nge-post karena emang suka sama fotonya. Likes itu bonus.", icon: "😌", score: { PF: 2, TR: -1 } } ]}, { question: "Menjelang ujian akhir, gimana caramu nyiapin diri?", answers: [ { text: "Belajar sambil dengerin podcast, nonton TV, dan balesin chat.", icon: "🎧", score: { JUG: 2, PF: -2 } }, { text: "Belajar pas lagi niat aja. Kalau lagi mager, yaudah SKS.", icon: "⚡️", score: { PV: 2, PF: -1 } }, { text: "Bikin jadwal belajar yang jelas, nentuin target materi per hari.", icon: "🎯", score: { PF: 2, JUG: -1 } } ]}, { question: "Ada challenge atau tren baru yang lagi viral banget di TikTok. Semua temenmu ikutan bikin. Apa reaksimu?", answers: [ { text: "Harus ikutan! Langsung mikirin konsep, biar gak dicap ketinggalan zaman.", icon: "💃", score: { TR: 2, CO: 1 } }, { text: "Nontonin video-videonya sih seru, tapi kayaknya gak bakal ikutan bikin.", icon: "🍿", score: { PV: 2 } }, { text: "Menarik sih trennya, tapi lagi ada prioritas lain yang lebih penting.", icon: "⚖️", score: { PF: 2, TR: -1 } } ]}, { question: "Sayangnya, nilai ulangan matematikamu jelek. Apa yang kamu pikirkan dan lakukan setelahnya?", answers: [ { text: "Merasa gagal dan langsung ngebandingin nilaiku sama temen-temen.", icon: "😭", score: { CO: 1, TR: 1 } }, { text: "Kecewa bentar, terus yaudah lupain aja. 'Mungkin emang aku gak jago.'", icon: "💔", score: { PV: 1, PF: -1 } }, { text: "Menganalisis kesalahanku di mana aja. Bikin rencana buat belajar lagi.", icon: "📝", score: { PF: 2, PV: -1 } } ]}, { question: "Ada jam kosong karena guru rapat. Teman-temanmu langsung ngeluarin HP. Apa yang kamu lakukan?", answers: [ { text: "Ikutan main bareng atau scroll juga. Mumpung ada waktu bebas.", icon: "🎮", score: { CO: 1, JUG: 1 } }, { text: "Kadang ikut main, kadang milih buat dengerin lagu sambil ngelamun.", icon: "🎶", score: { PV: 2 } }, { text: "Manfaatin waktu buat nyicil PR atau baca materi buat pelajaran selanjutnya.", icon: "📚", score: { PF: 2, JUG: -1 } } ]}, { question: "Diajakin hangout sama teman-teman. Pas diskusi milih tempat, usulan apa yang kamu kasih?", answers: [ { text: "Tempat kafe baru yang lagi viral dan Instagrammable.", icon: "📸", score: { TR: 2 } }, { text: "'Terserah kalian aja, aku ngikut.' Yang penting kumpul bareng.", icon: "🧑‍🤝‍🧑", score: { CO: 1, PV: 1 } }, { text: "Tempat yang wifinya kenceng dan gak terlalu berisik, biar nyaman.", icon: "💻", score: { PF: 2, TR: -1 } } ]} ];
         const resultsData = { CO: { title: "Si Chronically Online!", superpower: "Kamu super connected! Kamu tahu apa yang terjadi, siapa lagi ngapain, dan selalu jadi yang pertama tahu info penting atau jokes internal. Kamu adalah perekat sosial di grupmu.", challenge: "Karena selalu ingin terhubung, fokusmu gampang banget 'dibajak' oleh notifikasi dan godaan untuk scroll. Rasa takut ketinggalan (FOMO) seringkali membuatmu lebih memprioritaskan apa yang terjadi di dunia maya.", actionPlan: ["<b>Jadwalin 'Sesi FOMO'.</b> Daripada mengecek HP setiap 5 menit, tentukan waktu khusus (misalnya: 15 menit setiap 2 jam belajar) untuk scroll sepuasnya.", "<b>Kurasi Notifikasi, Bukan Eliminasi.</b> Masuk ke pengaturan notifikasi di HP-mu. Matikan semua notifikasi dari aplikasi yang tidak esensial.", "<b>Praktik JOMO (Joy of Missing Out).</b> Coba satu kali saja secara sadar meninggalkan HP di tas saat sedang makan bareng teman. Rasakan nikmatnya hadir 100% di dunia nyata."] }, TR: { title: "Si Trendy!", superpower: "Kreativitas dan kepekaan sosialmu sangat tinggi. Kamu bisa melihat peluang untuk berkarya di mana saja dan punya bakat alami untuk membuat sesuatu yang biasa menjadi 'estetik' dan menarik.", challenge: "Fokusmu seringkali terkuras untuk hal-hal yang bisa 'dilihat' dan divalidasi oleh orang lain. Tekanan untuk selalu tampil sempurna dan relevan bisa membuatmu lelah dan sulit untuk fokus pada hal-hal yang 'tidak Instagrammable' tapi penting.", actionPlan: ["<b>'Gamify' Tugas Sekolah.</b> Anggap tugas sekolah sebagai challenge untuk kontenmu. Bagaimana caranya membuat catatan Biologi jadi super estetik?", "<b>Terapkan 'Creator Mode' vs 'Student Mode'.</b> Alokasikan blok waktu yang jelas dalam sehari. Misal, jam 4-6 sore adalah 'Creator Mode', tapi jam 7-9 malam adalah 'Student Mode'.", "<b>Cari Validasi dari Dalam.</b> Sebelum mem-posting sesuatu, tanyakan pada dirimu: 'Apakah aku melakukan ini karena aku benar-benar menyukainya, atau karena aku ingin orang lain menyukainya?'"] }, PV: { title: "Si Pencari Vibe!", superpower: "Ketika kamu benar-benar tertarik pada sesuatu, fokus dan energimu bisa mencapai level 11/10! Kamu belajar bukan karena disuruh, tetapi karena rasa ingin tahu yang tulus. Ini adalah kunci untuk pembelajaran yang mendalam.", challenge: "Tantangan terbesarmu adalah menghadapi tugas-tugas yang 'tidak nyambung' dengan minat atau mood-mu saat itu. Jika sebuah mata pelajaran terasa membosankan, motivasimu bisa langsung anjlok ke nol.", actionPlan: ["<b>'Hack' Vibe-mu (Ciptakan Lingkungan).</b> Sebelum memulai tugas yang membuatmu mager, ciptakan 'ritual' untuk menaikkan mood. Siapkan meja belajar yang rapi, putar playlist favorit.", "<b>Temukan 'Why'-nya (Ciptakan Makna).</b> Untuk tugas yang paling membosankan sekalipun, coba tanyakan: 'Mengapa aku harus mengerjakan ini? Apa satu keuntungan kecil yang bisa aku dapatkan jika ini selesai?'.", "<b>Gunakan Teknik '5-Menit'.</b> Katakan pada diri sendiri untuk mengerjakan tugas yang membosankan itu HANYA selama 5 menit. Seringkali, memulai adalah bagian tersulit."] }, JUG: { title: "Si Tukang Juggling!", superpower: "Kamu tidak mudah panik di tengah 'keramaian' digital dan terbiasa dengan aliran informasi yang cepat. Kamu memiliki kemampuan untuk beralih antar-stimulus dengan cepat.", challenge: "Kenyataannya, otak manusia tidak bisa benar-benar multitasking, melainkan switch-tasking. Setiap kali kamu berpindah, ada 'biaya mental' yang harus dibayar. Ini membuat energimu lebih cepat terkuras dan kualitasnya menurun.", actionPlan: ["<b>Praktikkan Teknik Pomodoro.</b> Atur timer selama 25 menit. Selama itu, berkomitmenlah untuk mengerjakan SATU tugas saja. Setelah timer berbunyi, ambil istirahat 5 menit.", "<b>Terapkan Aturan 'Satu Jendela, Satu Tugas'.</b> Saat di laptop, biasakan untuk bekerja dengan satu jendela aplikasi yang terbuka (full screen).", "<b>Buat 'Daftar Distraksi'.</b> Saat sedang fokus bekerja, seringkali muncul pikiran acak. Daripada langsung melakukannya, siapkan secarik kertas di sebelahmu dan tulis pikiran itu."] }, PF: { title: "Pawang Fokus!", superpower: "Metakognisi! Kamu punya kesadaran diri yang tinggi tentang cara belajarmu sendiri. Kamu mampu merencanakan, memantau, dan mengevaluasi proses belajarmu, yang menjadikanmu pembelajar yang sangat efektif.", challenge: "Tantanganmu bukan lagi 'bagaimana cara fokus?', tetapi 'bagaimana cara mempertahankan sistem ini agar tetap fleksibel?'. Terkadang, ada risiko menjadi terlalu kaku dengan rutinitas atau lupa istirahat.", actionPlan: ["<b>Jadwalkan 'Waktu Tidak Terstruktur'.</b> Selain jadwal belajar yang sudah terstruktur, sengaja alokasikan waktu untuk 'tidak melakukan apa-apa' atau melakukan sesuatu secara spontan.", "<b>Ajari Temanmu (The Protégé Effect).</b> Cara terbaik untuk benar-benar menguasai sesuatu adalah dengan mengajarkannya kepada orang lain. Coba bagikan satu atau dua tips fokusmu kepada teman.", "<b>Lakukan 'Audit Strategi' Bulanan.</b> Di akhir setiap bulan, luangkan 15 menit untuk merefleksikan: 'Strategi belajar apa yang paling berhasil bulan ini? Apa yang tidak berhasil?'."] } };
-        const personaImages = { CO: 'images/co.png', TR: 'images/tr.png', PV: 'images/pv.png', JUG: 'images/jug.png', PF: 'images/pf.png' };
-        function showStartSlideshow() { userName = nameInput.value.trim() || 'Kamu'; introScreen.style.opacity = '0'; setTimeout(() => { introScreen.classList.add('hidden'); startContainer.classList.remove('hidden'); }, 500); }
-        function showSlide(index) { slides.forEach((slide, i) => { slide.classList.toggle('active', i === index); }); navLeft.classList.toggle('hidden', index === 0); navRight.classList.toggle('hidden', index === totalSlides - 1); }
-        function navigateSlides(direction) { currentSlideIndex += direction; if (currentSlideIndex < 0) currentSlideIndex = 0; if (currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1; showSlide(currentSlideIndex); }
-        function startQuiz() { startContainer.style.opacity = '0'; setTimeout(() => { startContainer.classList.add('hidden'); startContainer.style.opacity = '1'; questionContainer.classList.remove('hidden'); currentQuestionIndex = 0; scores = { CO: 0, TR: 0, PV: 0, JUG: 0, PF: 0 }; setNextQuestion(); }, 500); }
+        
+        // === KODE YANG DIPERBAIKI (2) ===
+        const personaImages = { 
+            CO: 'https://i.imgur.com/uF5n51j.png', 
+            TR: 'https://i.imgur.com/oaPEX3I.png', 
+            PV: 'https://i.imgur.com/pS8Jp3s.png', 
+            JUG: 'https://i.imgur.com/CGBO8iE.png', 
+            PF: 'https://i.imgur.com/5wQz9J9.png' 
+        };
+
+        function showStartSlideshow() {
+            userName = nameInput.value.trim() || 'Kamu';
+            introScreen.style.opacity = '0';
+            setTimeout(() => {
+                introScreen.classList.add('hidden');
+                startContainer.classList.remove('hidden');
+            }, 500);
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            navLeft.classList.toggle('hidden', index === 0);
+            navRight.classList.toggle('hidden', index === totalSlides - 1);
+        }
+        
+        function navigateSlides(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex < 0) currentSlideIndex = 0;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
+            showSlide(currentSlideIndex);
+        }
+
+        function startQuiz() { 
+            startContainer.style.opacity = '0'; 
+            setTimeout(() => { 
+                startContainer.classList.add('hidden'); 
+                startContainer.style.opacity = '1'; 
+                questionContainer.classList.remove('hidden'); 
+                currentQuestionIndex = 0; 
+                scores = { CO: 0, TR: 0, PV: 0, JUG: 0, PF: 0 }; 
+                setNextQuestion(); 
+            }, 500); 
+        }
+
         function setNextQuestion() { resetState(); showQuestion(questions[currentQuestionIndex]); }
         function showQuestion(question) { questionHeader.style.backgroundColor = colorPalette[currentQuestionIndex % colorPalette.length]; questionText.innerText = question.question; const progressPercent = ((currentQuestionIndex) / questions.length) * 100; progressBarFill.style.width = `${progressPercent}%`; progressText.innerText = `Pertanyaan ${currentQuestionIndex + 1} dari ${questions.length}`; question.answers.forEach(answer => { const button = document.createElement('button'); button.innerHTML = `<span class="icon">${answer.icon}</span> ${answer.text}`; button.classList.add('btn-answer'); button.addEventListener('click', () => selectAnswer(answer.score)); answerButtons.appendChild(button); }); }
         function resetState() { while (answerButtons.firstChild) { answerButtons.removeChild(answerButtons.firstChild); } }
@@ -288,14 +320,26 @@
         function displayScoreBreakdown() { const sortedScores = Object.entries(scores).sort(([,a],[,b]) => b-a); const topThree = sortedScores.slice(0, 3); const scoreValues = topThree.map(([, value]) => value); const maxScoreValue = Math.max(...scoreValues); const minScoreValue = Math.min(0, ...scoreValues); let scoreHTML = `<h3>Kecenderungan Teratasmu:</h3><ul id="score-breakdown-list">`; topThree.forEach(([key, value]) => { let widthPercent = 0; if (maxScoreValue > minScoreValue) { widthPercent = ((value - minScoreValue) / (maxScoreValue - minScoreValue)) * 100; } else if (maxScoreValue !== 0) { widthPercent = 100; } widthPercent = Math.max(10, widthPercent); scoreHTML += `<li><span class="persona-name">${personaKeys[key]}</span><div class="score-bar-container"><div class="score-bar-fill" data-width="${widthPercent}%"></div></div></li>`; }); scoreHTML += `</ul>`; bentoScores.innerHTML = scoreHTML; setTimeout(() => { document.querySelectorAll('.score-bar-fill').forEach(bar => { bar.style.width = bar.dataset.width; }); }, 100); }
         function populateAllResults() { let allResultsHTML = '<h1>Semua Profil Persona</h1>'; for(const key in personaKeys) { const personaData = resultsData[key]; const personaImagePath = personaImages[key]; allResultsHTML += ` <div class="persona-card-full"> <div class="persona-image-placeholder"> <img src="${personaImagePath}" alt="${personaData.title}"> </div> <div class="persona-details"> <h2>Profil FYP-mu: ${personaData.title}</h2> <div class="result-section"><h3>✨ Superpower Kamu:</h3><p>${personaData.superpower}</p></div> <div class="result-section"><h3>🤔 Tantangan Fokus Kamu:</h3><p>${personaData.challenge}</p></div> <div class="result-section"><h3>🚀 #FokusYukPlease Action Plan:</h3><ul>${personaData.actionPlan.map(item => `<li>${item}</li>`).join('')}</ul></div> </div> </div>`; } allResultsContainer.innerHTML = allResultsHTML; }
         function toggleAllResultsView() { allResultsScreen.classList.toggle('hidden'); }
+        
+        // --- Event Listeners ---
         showSlide(currentSlideIndex);
+
         introContinueBtn.addEventListener('click', showStartSlideshow);
         navLeft.addEventListener('click', () => navigateSlides(-1));
         navRight.addEventListener('click', () => navigateSlides(1));
         startBtn.addEventListener('click', startQuiz); 
-        restartBtn.addEventListener('click', () => { resultScreen.classList.add('hidden'); introScreen.classList.remove('hidden'); introScreen.style.opacity = '1'; body.style.backgroundColor = 'var(--c-dark-gray)'; nameInput.value = ''; currentSlideIndex = 0; showSlide(0); }); 
+        restartBtn.addEventListener('click', () => { 
+            resultScreen.classList.add('hidden'); 
+            introScreen.classList.remove('hidden');
+            introScreen.style.opacity = '1';
+            body.style.backgroundColor = 'var(--c-dark-gray)'; 
+            nameInput.value = '';
+            currentSlideIndex = 0;
+            showSlide(0);
+        }); 
         viewAllBtn.addEventListener('click', toggleAllResultsView); 
         closeBtn.addEventListener('click', toggleAllResultsView);
+
     </script>
 </body>
 </html>
